@@ -172,7 +172,20 @@ export function upvotelogic(message:Message){
             }
             room.message[i].upvotedid?.push(message.userid);
             room.message[i].upvote++;
-            console.log(room.message[i]);
+            room.user.map(({ws})=>{
+        
+                // ye wala logic likh lena bad me isme hume jo room me hai nahi wo send nahi kar sakta wese frontend se implemet ho jayega
+                for(let i=0;i<room.user.length;i++){
+                    if(room.user[i].userid==message.userid){
+                        console.log(message.upvote);
+                        console.log(message.downvote);
+                        ws?.send(JSON.stringify(message.downvote));
+                        ws?.send(JSON.stringify(message.upvote));
+                    }
+                }
+               
+            })
+            
         }  
      } 
    } 
@@ -217,6 +230,17 @@ export function upvotelogic(message:Message){
         room.message[i].downvote++;
         console.log(room.message[i]);
     }
+    room.user.map(({ws})=>{
+        
+        // ye wala logic likh lena bad me isme hume jo room me hai nahi wo send nahi kar sakta wese frontend se implemet ho jayega
+        for(let i=0;i<room.user.length;i++){
+            if(room.user[i].userid==message.userid){
+                ws?.send(JSON.stringify(message.downvote));
+                ws?.send(JSON.stringify(message.upvote));
+            }
+        }
+       
+    })
    }
 //    console.log(room);
 
