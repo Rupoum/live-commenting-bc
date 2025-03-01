@@ -117,11 +117,7 @@ export function sendmessage(roomid:string,socket:WebSocket,message:string,userid
                     return;
                 }
                 // ye wala logic likh lena bad me isme hume jo room me hai nahi wo send nahi kar sakta wese frontend se implemet ho jayega
-                for(let i=0;i<room.user.length;i++){
-                    if(room.user[i].userid==userids){
-                        ws?.send(JSON.stringify(message));
-                    }
-                }
+               ws?.send(JSON.stringify(message));
                
             })
         }
@@ -132,7 +128,7 @@ export function upvotelogic(message:Message){
     // const count=message.upvote++;
    const room=rooms.get(roomId);
    if(!room?.message){
-    console.log(room);
+    // console.log(room);
     console.log("checke2");
     return;
    }
@@ -150,7 +146,7 @@ export function upvotelogic(message:Message){
    for(let i=0;i<room?.message.length;i++){
         if(message.messageid==room.message[i].messageid){
           if(!room.message[i]){
-            console.log("check1");
+            // console.log("check1");
             return;
           }
             // @ts-ignore
@@ -173,17 +169,15 @@ export function upvotelogic(message:Message){
             room.message[i].upvotedid?.push(message.userid);
             room.message[i].upvote++;
             room.user.map(({ws})=>{
-        
-                // ye wala logic likh lena bad me isme hume jo room me hai nahi wo send nahi kar sakta wese frontend se implemet ho jayega
-                for(let i=0;i<room.user.length;i++){
-                    if(room.user[i].userid==message.userid){
-                        console.log(message.upvote);
-                        console.log(message.downvote);
-                        ws?.send(JSON.stringify(message.downvote));
-                        ws?.send(JSON.stringify(message.upvote));
-                    }
-                }
                
+                // @ts-ignore
+                // ye wala logic likh lena bad me isme hume jo room me hai nahi wo send nahi kar sakta wese frontend se implemet ho jayega
+                        console.log(room.message[i].upvote);
+                // @ts-ignore
+                        ws?.send(JSON.stringify(room.message[i].upvote));
+                            // @ts-ignore
+                        ws?.send(JSON.stringify(room.message[i].downvote));
+                 
             })
             
         }  
@@ -214,9 +208,7 @@ export function upvotelogic(message:Message){
               }
             
         }
-    }
-        
-        if(room.message[i].upvotedid){
+    }   
             // @ts-ignore
         for(let j=0;j<room.message[i].upvotedid?.length;j++){
             // @ts-ignore
@@ -225,23 +217,23 @@ export function upvotelogic(message:Message){
                  room.message[i].upvote--;
             }
         }
-    }
         room.message[i].downvoteid?.push(message.userid);
         room.message[i].downvote++;
-        console.log(room.message[i]);
-    }
+        // console.log(room.message[i]);
+    
     room.user.map(({ws})=>{
-        
+               
+        // @ts-ignore
         // ye wala logic likh lena bad me isme hume jo room me hai nahi wo send nahi kar sakta wese frontend se implemet ho jayega
-        for(let i=0;i<room.user.length;i++){
-            if(room.user[i].userid==message.userid){
-                ws?.send(JSON.stringify(message.downvote));
-                ws?.send(JSON.stringify(message.upvote));
-            }
-        }
-       
+                // console.log(room.message[i].upvote);
+        // @ts-ignore
+                ws?.send(JSON.stringify(room.message[i].upvote));
+                    // @ts-ignore
+                ws?.send(JSON.stringify(room.message[i].downvote));
+         
     })
    }
+}
 //    console.log(room);
 
 
