@@ -80,7 +80,7 @@ export function removeuser(roomid:string,userId:string,socket:WebSocket){
       
     // console.log(rooms.get(2));
 }
-export function sendmessage(roomid:string,socket:WebSocket,message:string,userids:string,messageid:string){
+export function sendmessage(roomid:string,socket:WebSocket,message:string,userids:string,messageid:string,name:string){
         const roomId=parseInt(roomid);
         const room=rooms.get(roomId);
         if(!room){
@@ -110,15 +110,17 @@ export function sendmessage(roomid:string,socket:WebSocket,message:string,userid
                       console.log(room.message);
                     console.log("finalcheck",rooms); 
                 }
-             }  
-                 
-              room.user.map(({userid,ws})=>{
-                if(userid===userids){
-                    return;
-                }
-                // ye wala logic likh lena bad me isme hume jo room me hai nahi wo send nahi kar sakta wese frontend se implemet ho jayega
-               ws?.send(JSON.stringify(message));
-               
+             }
+              room.user.map(({ws})=>{
+               const Message={
+                userid:userids,
+                roomid:roomid,
+                message:message,
+                 type:"MESSAGE",
+                 name:name
+            }
+              //  const userid=JSON.stringify(userids);
+               ws?.send(JSON.stringify(Message));
             })
         }
 }
@@ -169,14 +171,18 @@ export function upvotelogic(message:Message){
             room.message[i].upvotedid?.push(message.userid);
             room.message[i].upvote++;
             room.user.map(({ws})=>{
-               
+              const UPVOTE={
+                roomid:message.roomid,
+                messageid:message.messageid,
+                userid:message.userid,
+                type:"UPVOTE",
                 // @ts-ignore
-                // ye wala logic likh lena bad me isme hume jo room me hai nahi wo send nahi kar sakta wese frontend se implemet ho jayega
-                        console.log(room.message[i].upvote);
+                upvote:room.message[i].upvote,
                 // @ts-ignore
-                        ws?.send(JSON.stringify(room.message[i].upvote));
-                            // @ts-ignore
-                        ws?.send(JSON.stringify(room.message[i].downvote));
+                downvote:room.message[i].downvote
+            }
+                        ws?.send(JSON.stringify(UPVOTE));
+                    
                  
             })
             
@@ -222,14 +228,17 @@ export function upvotelogic(message:Message){
         // console.log(room.message[i]);
     
     room.user.map(({ws})=>{
-               
+      const DOWNVOTE={
+        roomid:message.roomid,
+        messageid:message.messageid,
+        userid:message.userid,
+        type:"DOWNVOTE",
         // @ts-ignore
-        // ye wala logic likh lena bad me isme hume jo room me hai nahi wo send nahi kar sakta wese frontend se implemet ho jayega
-                // console.log(room.message[i].upvote);
+        upvote:room.message[i].upvote,
         // @ts-ignore
-                ws?.send(JSON.stringify(room.message[i].upvote));
-                    // @ts-ignore
-                ws?.send(JSON.stringify(room.message[i].downvote));
+        downvote:room.message[i].downvote
+    }
+                ws?.send(JSON.stringify(DOWNVOTE));
          
     })
    }

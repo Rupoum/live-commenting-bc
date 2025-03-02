@@ -7,6 +7,7 @@ interface User{
     userid:string,
     roomid:string,
     ws?:WebSocket;
+    
 }
 interface room{
     user:User[]
