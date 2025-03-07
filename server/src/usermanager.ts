@@ -117,7 +117,8 @@ export function sendmessage(roomid:string,socket:WebSocket,message:string,userid
                 roomid:roomid,
                 message:message,
                  type:"MESSAGE",
-                 name:name
+                 name:name,
+                 messageid:messageid
             }
               //  const userid=JSON.stringify(userids);
                ws?.send(JSON.stringify(Message));
@@ -205,6 +206,7 @@ export function upvotelogic(message:Message){
         return;
      }
     for(let i=0;i<room.message.length;i++){
+      if(room.message[i].messageid==message.messageid){
         if(room.message[i].downvoteid){
         // @ts-ignore
         for(let j=0;j<room.message[i].downvoteid?.length;j++){
@@ -215,7 +217,8 @@ export function upvotelogic(message:Message){
             
         }
     }   
-            // @ts-ignore
+        if(room.message[i].upvotedid){
+          // @ts-ignore
         for(let j=0;j<room.message[i].upvotedid?.length;j++){
             // @ts-ignore
             if(room.message[i].upvotedid[j]==message.userid){
@@ -223,6 +226,7 @@ export function upvotelogic(message:Message){
                  room.message[i].upvote--;
             }
         }
+      }
         room.message[i].downvoteid?.push(message.userid);
         room.message[i].downvote++;
         // console.log(room.message[i]);
@@ -242,6 +246,7 @@ export function upvotelogic(message:Message){
          
     })
    }
+  }
 }
 //    console.log(room);
 
