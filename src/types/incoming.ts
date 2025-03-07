@@ -10,3 +10,15 @@ export type SENDMESSAGE={
     message:string
     roomid:string,
 }
+export type UPVOTE={
+    type:"UPVOTE",
+    userid:string,
+    roomid:string,
+    messageid:string
+}
+export type Downvvote={
+    type:"DOWNVOTE"
+    userid:string
+    roomid:string
+     messageid:string
+}

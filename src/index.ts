@@ -1,8 +1,8 @@
 import {WebSocketServer,WebSocket}  from "ws"
 import { adduser, sendtouser } from "./roomlogic";
 import { connection } from "websocket";
-import { addsuser, removeuser, sendmessage, upvotelogic } from "./usermanager";
-const socket=new WebSocketServer({port:4000});
+import { addsuser, downvote, removeuser, sendmessage, upvotelogic } from "./usermanager";
+const socket=new WebSocketServer({port:4001});
 const bufferarray={};
 interface User{
     name:string,
@@ -21,13 +21,17 @@ socket.on('connection',(ws:WebSocket)=>{
              console.log("check");
          } 
          if(parsedmessage.type=="SENDMESSAGE"){
-              sendmessage(parsedmessage.roomid,ws,parsedmessage.message,parsedmessage.userid,parsedmessage.messageid);
+            console.log("asdasd");
+              sendmessage(parsedmessage.roomid,ws,parsedmessage.message,parsedmessage.userid,parsedmessage.messageid,parsedmessage.name);
          }  
          if(parsedmessage.type=="REMOVEUSER"){  
             removeuser(parsedmessage.roomid,parsedmessage.userid,ws);
          }
          if(parsedmessage.type=="UPVOTE"){
              upvotelogic(parsedmessage);
+         }
+         if(parsedmessage.type=="DOWNVOTE"){
+            downvote(parsedmessage);
          }
        })
     //    ws.on('message',(messge)=>{
